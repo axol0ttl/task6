@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(task5proto)
+project(task6_neprosto)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -30,6 +30,13 @@ add_executable(task5proto
         msector/msector.h
         msegment/msegment.cpp
         msegment/msegment.h
+        objects/object.cpp
+        objects/object.h
+        objects/MOline.h
+        objects/MOarc.h
+        objects/MOsquare.h
+        objects/MOsector.h
+        objects/MOsegment.h
 )
 
 target_link_libraries(task5proto

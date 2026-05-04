@@ -4,7 +4,7 @@
 #pragma once
 #include "../figure/figure_selfmade.h"
 
-class square_selfmade : public figure_selfmade {
+class square_selfmade : virtual public figure_selfmade {
 private:
     float width;
     float height;

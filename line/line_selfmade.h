@@ -3,7 +3,9 @@
 //
 
 #pragma once
+#include <iostream>
 #include "../figure/figure_selfmade.h"
+#include "../objects/object.h"
 
 class line_selfmade : virtual public figure_selfmade {
 private:

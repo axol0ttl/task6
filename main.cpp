@@ -1,53 +1,59 @@
 #include <iostream>
 #include "graphlib.h"
-#include "line/line_selfmade.h"
-#include "arc/arc_selfmade.h"
-#include "square/square_selfmade.h"
-#include "msector/msector.h"
-#include "msegment/msegment.h"
+#include "objects/object.h"
+#include "objects/MOsquare.h"
+#include "objects/MOsector.h"
+#include "objects/MOsegment.h"
+#include "objects/MOline.h"
+#include "objects/MOarc.h"
+
 
 void Main(void) {
-    // Создаем массив указателей на базовый класс Figure
-    const int num_figures = 10;
-    figure_selfmade* picture[num_figures];
-    float n = 4.5; // масштаб
-    //множитель к размеру
-    //заполняем массив конкретными объектами
-    //используем 'new', так как работаем с указателями
+    const int num = 5;
+    object* list[num];
+    float n = 4.5;
 
+    // 1. Создаем разные объекты
+    list[0] = new MNumber(555);
+    list[1] = new MOline(100*n, 100*n, 0, 0, 100*n, 100*n, 255, 0, 0);
+    list[2] = new MOsquare(200*n, 200*n, 50*n, 50*n, 0, 255, 0);
+    list[3] = new MOsector(300*n, 150*n, 50*n, 0, 90, 50*n, 50*n, 0, 0, 255);
+    list[4] = new MNumber(7);
 
-    picture[0] = new line_selfmade(400*n, 100*n, 0*n, 0*n, 0*n, 100*n, 255, 0, 0);
-    picture[1] = new line_selfmade(400*n, 100*n, 0*n, 0*n, 100*n, 0*n, 255, 0, 0);
-    picture[2] = new line_selfmade(400*n, 200*n, 0*n, 0*n, 100*n, 0*n, 255, 0, 0);
-    picture[3] = new line_selfmade(500*n, 100*n, 0*n, 0*n, 0*n, 100*n, 255, 0, 0);
-    picture[4] = new line_selfmade(400*n, 200*n, 0*n, 0*n, 50*n, 50*n, 255, 0, 0);
-    picture[5] = new line_selfmade(500*n, 200*n, 0*n, 0*n, -50*n, 50*n, 255, 0, 0);
+    // 2. Демонстрируем полиморфизм и dynamic_cast
+    for (int i = 0; i < num; i++) {
+        std::cout << "Объект " << i << ": ";
+        list[i]->print(); // Виртуальный метод печати
+        std::cout << std::endl;
+        // Пытаемся привести к фигуре, чтобы подвинуть/нарисовать
+        figure_selfmade* fig = dynamic_cast<figure_selfmade*>(list[i]);
 
-    picture[6] = new  arc_selfmade(450*n, 150*n, 25*n, 0, 360, 255, 123, 123);
-    picture[7] = new square_selfmade(450*n, 150*n, 50*n, 100*n, 255, 0, 255); // квадрат настоящий
-    // новое
-    picture[8] = new msector(100*n, 150*n, 100*n, 30, 67, 0*n, 100*n, 255, 255, 0);
-    picture[9] = new msegment(300*n, 150*n, 50*n, 45, 135, 255, 0, 255); // сегмент (дуга + хорда)
-
-    for (int i = 0; i < num_figures; i++) {
-        picture[i]->change_color(0, 255, 0); // меняем цвет третей фигуры на зеленый
-        // Ожидание
-        wait4keyORmouse();
+        if (fig) { // если фигура, сдвигаем
+            fig->move(20, 20); // Метод фигуры
+            wait4keyORmouse();
+        } else {
+            // Это не фигура, пропускаем сдвиг
+        }
     }
 
-    std::cout << "Перемещаем все фигуры разом" << std::endl;
-    for (int i = 0; i < num_figures; i++) {
-        picture[i]->move(100, 350); // Сдвигаем каждую фигуру на 100 вправо и 50 вниз
+    // 3. Пример со ссылкой (на оценку 5+)
+    try {
+        std::cout << "\nПроверка первого элемента на число..." << std::endl;
+        MNumber& numRef = dynamic_cast<MNumber&>(*list[0]);
+        numRef.print();
+    } catch (const std::bad_cast& e) {
+        std::cout << "Ошибка приведения!" << std::endl;
     }
 
-    // ждем
+    // Чистка
+    for (int i = 0; i < num; i++) {
+        // Если это фигура, сотрем с экрана перед удалением
+        figure_selfmade* fig = dynamic_cast<figure_selfmade*>(list[i]);
+        if (fig) fig->erase();
+
+        delete list[i];
+    }
+
+    std::cout << "Готово!" << std::endl;
     wait4keyORmouse();
-
-    // чистка памяти
-    // благодаря 'virtual ~Figure()', вызов delete для Figure* // правильно вызовет деструктор line_selfmade или arc_selfmade, и фигура сотрется (erase)
-    std::cout << "удаляем фигуры (они должны исчезнуть с экрана)" << std::endl;
-    for (int i = 0; i < num_figures; i++) {
-        picture[i]->erase(); // Стираем фигуру с экрана
-    }
-       wait4keyORmouse();
- }
+}
