@@ -15,7 +15,7 @@ class MOsquare : public object, public square_selfmade {
         draw();
     }
 
-    void print() const override {
-        std::cout << "я квадрат" << std::endl;
+    void print(const std::string& suffix = "") const override {
+        std::cout << "я квадрат" << suffix << std::endl;
     }
 };

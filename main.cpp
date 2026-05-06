@@ -7,18 +7,26 @@
 #include "objects/MOline.h"
 #include "objects/MOarc.h"
 
+//TODO исправить: убрать переменные в h файлах (я пока не знаю че еще сказать)
 
 void Main(void) {
-    const int num = 5;
+    const int num = 11;
     object* list[num];
     float n = 4.5;
 
     // 1. Создаем разные объекты
-    list[0] = new MNumber(555);
-    list[1] = new MOline(100*n, 100*n, 0, 0, 100*n, 100*n, 255, 0, 0);
-    list[2] = new MOsquare(200*n, 200*n, 50*n, 50*n, 0, 255, 0);
-    list[3] = new MOsector(300*n, 150*n, 50*n, 0, 90, 50*n, 50*n, 0, 0, 255);
-    list[4] = new MNumber(7);
+
+    list[0] = new    MOline(400*n, 100*n, 0*n, 0*n, 0*n, 100*n, 255, 0, 0);
+    list[1] = new    MOline(400*n, 100*n, 0*n, 0*n, 100*n, 0*n, 255, 0, 0);
+    list[2] = new    MOline(400*n, 200*n, 0*n, 0*n, 100*n, 0*n, 255, 0, 0);
+    list[3] = new    MOline(500*n, 100*n, 0*n, 0*n, 0*n, 100*n, 255, 0, 0);
+    list[4] = new    MOline(400*n, 200*n, 0*n, 0*n, 50*n, 50*n, 255, 0, 0);
+    list[5] = new    MOline(500*n, 200*n, 0*n, 0*n, -50*n, 50*n, 255, 0, 0);
+    list[6] = new    MOarc(450*n, 150*n, 25*n, 0, 360, 255, 123, 123);
+    list[7] = new    MOsquare(450*n, 150*n, 50*n, 100*n, 255, 0, 255); // квадрат настоящий
+    list[8] = new    MOsector(100*n, 150*n, 100*n, 30, 67, 0*n, 100*n, 255, 255, 0);
+    list[9] = new    MOsegment(300*n, 150*n, 50*n, 45, 135, 255, 0, 255); // сегмент (дуга + хорда)
+    list[10]= new    MNumber(555);
 
     // 2. Демонстрируем полиморфизм и dynamic_cast
     for (int i = 0; i < num; i++) {
@@ -28,13 +36,18 @@ void Main(void) {
         // Пытаемся привести к фигуре, чтобы подвинуть/нарисовать
         figure_selfmade* fig = dynamic_cast<figure_selfmade*>(list[i]);
 
+        wait4keyORmouse();
         if (fig) { // если фигура, сдвигаем
-            fig->move(20, 20); // Метод фигуры
-            wait4keyORmouse();
+
+            fig->move(20*n, 20*n); // Метод фигуры
+
+
         } else {
             // Это не фигура, пропускаем сдвиг
         }
+
     }
+    wait4keyORmouse();
 
     // 3. Пример со ссылкой (на оценку 5+)
     try {

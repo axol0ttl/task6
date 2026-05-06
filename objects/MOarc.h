@@ -15,7 +15,12 @@ public:
         draw();
     }
 
-    void print() const override {
-        std::cout << "я дуга" << std::endl;
+    static void print_impl(const std::string& suffix = "") {
+        std::cout << "я дуга" << suffix << std::endl;
+    }
+
+    // 2. Виртуальная функция для полиморфизма (вызов через object*)
+    void print(const std::string& suffix = "") const override {
+        print_impl(suffix);
     }
 };

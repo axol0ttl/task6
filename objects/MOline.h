@@ -15,7 +15,11 @@ public:
         draw();
     }
 
-    void print() const override {
-        std::cout << "я линия" << std::endl;
+    static void print_impl(const std::string& suffix = "") {
+        std::cout << "я линия" << suffix << std::endl;
+    }
+
+    void print(const std::string& suffix = "") const override {
+       print_impl(suffix);
     }
 };

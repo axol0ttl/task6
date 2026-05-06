@@ -22,3 +22,4 @@ void figure_selfmade::change_color(float r, float g, float b) {
     this->b = b/255.0f;
     draw();
 }
+

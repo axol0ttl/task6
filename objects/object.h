@@ -3,12 +3,13 @@
 //
 #pragma once
 #include <iostream>
+#include <string>
 
 class object {
 public:
     virtual ~object() {}
-    virtual void print() const {
-        std::cout << "я объедок." << std::endl;
+    virtual void print(const std::string& suffix = "") const{
+        std::cout << "я объект" << suffix << std::endl;
     }
 
 };
@@ -18,8 +19,8 @@ private:
     int value;
 public:
     MNumber(int v) : value(v) {}
-    void print() const override {
-        std::cout << "я число: " << value << std::endl;
+    void print(const std::string& suffix = "") const override {
+        std::cout << "я число: " << value << suffix << std::endl;
     }
 };
 

@@ -1,58 +1,65 @@
-//
-// Created by arseny on 04/05/2026.
-//
-
 #include "msector.h"
-
 #include <cmath>
+#include <unordered_map>
 #include "../graphlib.h"
+
+namespace {
+    struct SectorData {
+        float r1;
+        float r2;
+    };
+    std::unordered_map<const msector*, SectorData> sector_state;
+}
 
 msector::msector(
     float x, float y, float rad, float start, float end,
     float r1_len, float r2_len, float r, float g, float b)
-    // ОБЯЗАТЕЛЬНО добавить инициализацию самого базового виртуального класса:
     : figure_selfmade(x, y, r, g, b),
       arc_selfmade(x, y, rad, start, end, r, g, b),
-      line_selfmade(x, y, 0, 0, 0, 0, r, g, b),
-      r1(r1_len), r2(r2_len)
+      line_selfmade(x, y, 0, 0, 0, 0, r, g, b) 
 {
+    // Сохраняем r1 и r2 в карту
+    sector_state[this] = {r1_len, r2_len};
     draw();
 }
 
-msector::~msector() {}
+msector::~msector() {
+    erase();
+    // Чистим карту
+    sector_state.erase(this);
+}
 
 void msector::draw() {
-    // 1. Рисуем саму дугу (край пиццы)
-    // Используем параметры start и end, которые хранятся в arc_selfmade
+    // Получаем данные из карты
+    float r1_val = sector_state[this].r1;
+    float r2_val = sector_state[this].r2;
+
+    // Рисуем дугу (параметры x, y, radius и т.д. берем из родительских классов)
     draw_arc(x, y, radius, start_angle, end_angle, r, g, b);
 
-    // Переводим градусы в радианы для функций cos/sin
     float rad_start = (start_angle * 3.14159f) / 180.0f;
     float rad_end = (end_angle * 3.14159f) / 180.0f;
 
-    // 2. Рисуем первый радиус (от центра к началу дуги)
-    draw_line(x +r1*cosf(rad_start), y + r1*sinf(rad_start),
-            x + r2*cosf(rad_start), y + r2*sinf(rad_start), r, g, b);
+    // Рисуем два радиуса
+    draw_line(x + r1_val * cosf(rad_start), y + r1_val * sinf(rad_start),
+              x + r2_val * cosf(rad_start), y + r2_val * sinf(rad_start), r, g, b);
 
-    // 3. Рисуем второй радиус (от центра к концу дуги)
-    draw_line(x+r1*cosf(rad_end), y+r1*sinf(rad_end),
-        x +r2*cosf(rad_end), y + r2*sinf(rad_end), r, g, b);
+    draw_line(x + r1_val * cosf(rad_end), y + r1_val * sinf(rad_end),
+              x + r2_val * cosf(rad_end), y + r2_val * sinf(rad_end), r, g, b);
 }
 
 void msector::erase() {
-    // cтираем дугу (это сработает, так как параметры дуги хранятся в родителе)
+    float r1_val = sector_state[this].r1;
+    float r2_val = sector_state[this].r2;
+
     arc_selfmade::erase();
 
-    // cтираем радиусы вручную черным цветом, просто скопировав по сути метод draw
     float rad_start = (start_angle * 3.14159f) / 180.0f;
     float rad_end = (end_angle * 3.14159f) / 180.0f;
-    draw_line(x +r1*cosf(rad_start), y + r1*sinf(rad_start),
-            x + r2*cosf(rad_start), y + r2*sinf(rad_start), 0, 0, 0);
-    draw_line(x+r1*cosf(rad_end), y+r1*sinf(rad_end),
-        x +r2*cosf(rad_end), y + r2*sinf(rad_end), 0, 0, 0);
 
+    draw_line(x + r1_val * cosf(rad_start), y + r1_val * sinf(rad_start),
+              x + r2_val * cosf(rad_start), y + r2_val * sinf(rad_start), 0, 0, 0);
+    draw_line(x + r1_val * cosf(rad_end), y + r1_val * sinf(rad_end),
+              x + r2_val * cosf(rad_end), y + r2_val * sinf(rad_end), 0, 0, 0);
 }
 
-void msector::move(float dx, float dy) {
-    figure_selfmade::move(dx, dy);
-}

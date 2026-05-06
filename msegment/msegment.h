@@ -16,5 +16,4 @@ public:
 
     void draw() override;
     void erase() override;
-    void move(float dx, float dy);
 };

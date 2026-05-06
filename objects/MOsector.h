@@ -5,8 +5,8 @@
 #pragma once
 #include <iostream>
 #include "object.h"
-// #include "../arc/arc_selfmade.h"
-// #include "../line/line_selfmade.h"
+#include "MOarc.h"
+#include "MOline.h"
 #include "msector/msector.h"
 
 class MOsector : public object, public msector {
@@ -20,7 +20,10 @@ public:
         draw();
     }// 5. Другой прямой родитель
 
-    void print() const override {
-        std::cout << "я сектор" << std::endl;
+    void print(const std::string& suffix = "") const override {
+        std::cout << "я сектор" << suffix << std::endl;
+
+        MOline::print_impl(" сектора");
+        MOarc::print_impl(" сектора");
     }
 };
