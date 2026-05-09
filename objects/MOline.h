@@ -16,7 +16,7 @@ public:
     }
 
     static void print_impl(const std::string& suffix = "") {
-        std::cout << "я линия" << suffix << std::endl;
+        std::cout << "я линия " << suffix << std::endl;
     }
 
     void print(const std::string& suffix = "") const override {

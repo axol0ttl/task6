@@ -9,7 +9,7 @@ class object {
 public:
     virtual ~object() {}
     virtual void print(const std::string& suffix = "") const{
-        std::cout << "я объект" << suffix << std::endl;
+        std::cout << "я объект " << suffix << std::endl;
     }
 
 };

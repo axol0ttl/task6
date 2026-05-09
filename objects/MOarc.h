@@ -16,7 +16,7 @@ public:
     }
 
     static void print_impl(const std::string& suffix = "") {
-        std::cout << "я дуга" << suffix << std::endl;
+        std::cout << "я дуга " << suffix << std::endl;
     }
 
     // 2. Виртуальная функция для полиморфизма (вызов через object*)
