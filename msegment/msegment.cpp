@@ -49,8 +49,3 @@ void msegment::erase() {
 
     draw_line(x1, y1, x2, y2, 0, 0, 0);
 }
-
-void msegment::move(float dx, float dy) {
-    // Вызываем move базового класса фигуры, чтобы обновить x и y
-    figure_selfmade::move(dx, dy);
-}

@@ -4,6 +4,7 @@
 
 #pragma once
 #include "../figure/figure_selfmade.h"
+#include "../objects/object.h"
 
 
 class arc_selfmade : virtual public figure_selfmade {
